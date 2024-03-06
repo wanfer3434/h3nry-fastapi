@@ -1,0 +1,13 @@
+# Archivos generados automáticamente
+__pycache__/
+*.pyc
+
+# Archivos específicos del proyecto
+.dockerignore
+.gitignore
+README.md
+compose-dev.yaml
+index.html
+render.yaml
+requirements.txt
+API_requests.parquet

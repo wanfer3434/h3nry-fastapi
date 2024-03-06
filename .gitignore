@@ -1,0 +1,20 @@
+# Archivos generados automáticamente
+__pycache__/
+*.pyc
+
+# Archivos de registro
+*.log
+
+# Archivos y directorios específicos de Python y Docker
+.venv/
+.idea/
+.vscode/
+.mypy_cache/
+.pytest_cache/
+dist/
+build/
+*.egg-info/
+.tox/
+.coverage
+.docker/
+
