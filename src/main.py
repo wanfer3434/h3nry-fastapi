@@ -42,6 +42,50 @@ def read_root():
     """ Returns a welcome message. """
     return {"message": "Welcome to my FastAPI application!"}
 
+@app.get("/developer", summary="Developer Analysis")
+def developer():
+    """ Returns the number of items and the percentage of free content per year by developer. """
+    # Calcular la cantidad de items y el porcentaje de contenido gratuito por año para cada empresa desarrolladora
+    items_por_anio = games_data.groupby(['developer', 'year_posted']).size()
+    contenido_free_por_anio = games_data.groupby(['developer', 'year_posted'])['price'].apply(lambda x: (x == 0).mean()) * 100
+
+    # Crear un DataFrame con los resultados
+    resultados = pd.DataFrame({'Cantidad de Items': items_por_anio, 'Contenido Free': contenido_free_por_anio})
+
+    # Resetear el índice para convertirlo en columnas
+    resultados.reset_index(inplace=True)
+
+    # Convertir el DataFrame a un diccionario para el retorno
+    resultados_dict = resultados.to_dict(orient='records')
+
+    return resultados_dict
+
+
+@app.get("/userdata", summary="User Data")
+def userdata(User_id: str):
+    """Returns the amount of money spent by the user, the recommendation percentage based on reviews.recommend, and the number of items."""
+    # Filtrar los datos por ID de usuario
+    user_data = games_data[games_data['user_id_x'] == User_id]
+
+    # Verificar si hay datos para el usuario especificado
+    if user_data.empty:
+        raise HTTPException(status_code=404, detail="No data for the specified user.")
+
+    # Calcular el dinero gastado, el porcentaje de recomendación y la cantidad de items
+    money_spent = user_data['price'].sum()
+    recommendation_percentage = (user_data['recommend'].sum() / len(user_data['recommend'])) * 100
+    number_of_items = len(user_data)
+
+    # Crear el diccionario de retorno
+    user_data_dict = {
+        "User ID": User_id,
+        "Dinero gastado": money_spent,
+        "% de recomendación": f"{recommendation_percentage:.2f}%",
+        "Cantidad de items": number_of_items
+    }
+
+    return user_data_dict
+
 @app.get("/PlayTimeGenre", summary="Play Time by Genre")
 def play_time_by_genre(genres: str):
     """ Returns the year with the most playtime for a given genre. """

@@ -1,3 +1,4 @@
+http://127.0.0.1:8000/UsersWorstDeveloper?release_year=2013
 http://localhost:8000/user_recommendation?user_id_x=76561197970982479
 http://localhost:8000/game_recommendation?item_id_x=227300
 http://localhost:8000/PlayTimeGenre?genres=action
